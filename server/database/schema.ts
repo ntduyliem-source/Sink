@@ -66,3 +66,20 @@ export const linkMigrationRuns = sqliteTable('link_migration_runs', {
     sql`${table.id} desc`,
   ),
 ])
+
+// Keep aggregate-friendly click dimensions without storing visitor IPs or user agents.
+export const linkTraffic = sqliteTable('link_traffic', {
+  id: integer().primaryKey({ autoIncrement: true }),
+  occurredAt: integer('occurred_at').notNull(),
+  day: text().notNull(),
+  linkId: text('link_id').notNull(),
+  slug: text().notNull(),
+  country: text().notNull(),
+  device: text().notNull(),
+  browser: text().notNull(),
+  referrer: text().notNull(),
+  automated: integer({ mode: 'boolean' }).notNull(),
+}, table => [
+  index('link_traffic_time_slug_idx').on(table.occurredAt, table.slug),
+  index('link_traffic_slug_time_idx').on(table.slug, table.occurredAt),
+])

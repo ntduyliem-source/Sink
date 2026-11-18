@@ -34,6 +34,8 @@ export default defineNuxtConfig({
     importRequestLimit: 100,
     listQueryLimit: 500,
     disableBotAccessLog: false,
+    trafficEnabled: false,
+    trafficStartedAt: '',
     disableAutoBackup: false,
     expiredLinkRetentionDays: '',
     notFoundRedirect: '',

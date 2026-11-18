@@ -1,6 +1,7 @@
 import type { Link } from '@/types'
 import { parsePath, withQuery } from 'ufo'
 import { proxyLinkRequest } from '../services/link-proxy'
+import { queueTraffic } from '../services/traffic'
 
 const SOCIAL_BOTS = [
   'applebot',
@@ -174,6 +175,13 @@ export default eventHandler(async (event) => {
       }
 
       if (accessLogResult) {
+        try {
+          queueTraffic(event, accessLogResult.logs)
+        }
+        catch {
+          console.error({ event: 'traffic.scheduling.failed' })
+        }
+
         try {
           writeAccessLog(event, accessLogResult.logs)
         }
